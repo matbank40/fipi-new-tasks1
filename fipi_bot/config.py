@@ -19,6 +19,11 @@ def _load_dotenv(path: Path) -> None:
 _load_dotenv(ROOT / ".env")
 
 BOT_TOKEN = os.environ.get("BOT_TOKEN", "")
+# если Telegram с сервера заблокирован:
+#   TG_PROXY=socks5://user:pass@host:port  или  http://host:port
+#   TG_API_BASE=https://твой-воркер.workers.dev  (зеркало api.telegram.org)
+TG_PROXY = os.environ.get("TG_PROXY", "").strip() or None
+TG_API_BASE = os.environ.get("TG_API_BASE", "https://api.telegram.org").strip().rstrip("/")
 # id админов через запятую (свой id можно узнать у @userinfobot)
 ADMIN_IDS = {int(x) for x in os.environ.get("ADMIN_IDS", "").replace(" ", "").split(",") if x}
 # необязательно: канал, куда тоже постить новые задания (бот должен быть админом канала)

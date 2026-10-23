@@ -17,9 +17,12 @@ class Blocked(Exception):
 
 
 class TG:
-    def __init__(self, token: str) -> None:
-        self.base = f"https://api.telegram.org/bot{token}/"
+    def __init__(self, token: str, api_base: str = "https://api.telegram.org",
+                 proxy: str | None = None) -> None:
+        self.base = f"{api_base}/bot{token}/"
         self.s = requests.Session()
+        if proxy:
+            self.s.proxies = {"http": proxy, "https": proxy}
         self._lock = threading.Lock()
         self._last = 0.0
 

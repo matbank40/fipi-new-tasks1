@@ -23,7 +23,7 @@ logging.basicConfig(
 log = logging.getLogger("bot")
 
 db = DB()
-tg = TG(config.BOT_TOKEN)
+tg = TG(config.BOT_TOKEN, config.TG_API_BASE, config.TG_PROXY)
 scan_now = threading.Event()
 scan_lock = threading.Lock()
 
