@@ -1,0 +1,14 @@
+[Unit]
+Description=FIPI new tasks Telegram bot
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+WorkingDirectory=/opt/fipi_bot
+ExecStart=/opt/fipi_bot/venv/bin/python -m fipi_bot.main
+Restart=always
+RestartSec=10
+User=root
+
+[Install]
+WantedBy=multi-user.target

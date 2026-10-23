@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<style>
+  @font-face { font-family: "UI"; src: local("Inter"), local("Inter Regular"); }
+  :root {
+    --accent: {{ accent }};
+    --ink: #15171C;
+    --muted: #6A7180;
+    --line: #E3E6EB;
+    --paper: #FFFFFF;
+    --bg: #ECEEF1;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); }
+  body {
+    width: 1080px;
+    padding: 40px;
+    font-family: "Inter", "Noto Sans", "DejaVu Sans", sans-serif;
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+  }
+  .card {
+    background: var(--paper);
+    border-radius: 18px;
+    overflow: hidden;
+    border: 1px solid #DDE1E6;
+  }
+  .bar { height: 8px; background: var(--accent); }
+  header { padding: 40px 56px 28px; }
+  .top {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 21px; letter-spacing: .02em;
+  }
+  .subject { display: flex; align-items: center; gap: 12px; font-weight: 600; }
+  .subject i { width: 14px; height: 14px; border-radius: 3px; background: var(--accent); display: block; }
+  .badge {
+    font-size: 17px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
+    color: var(--accent); border: 1.5px solid var(--accent); border-radius: 999px; padding: 6px 14px;
+  }
+  h1 { font-size: 50px; line-height: 1.1; font-weight: 700; letter-spacing: -.02em; margin-top: 26px; }
+  .meta {
+    display: flex; flex-wrap: wrap; gap: 8px 28px; margin-top: 16px;
+    font-size: 20px; color: var(--muted);
+  }
+  .meta b { color: var(--ink); font-weight: 600; }
+  .mono { font-family: "DejaVu Sans Mono", monospace; letter-spacing: .03em; }
+  .task {
+    border-top: 1px solid var(--line);
+    padding: 40px 56px 48px;
+    font-size: 29px; line-height: 1.55;
+  }
+  .task p { margin: 0 0 .7em; }
+  .task p:last-child { margin-bottom: 0; }
+  .task img { vertical-align: middle; }
+  .task img.figure { display: block; margin: 28px auto; max-width: 100%; height: auto; }
+  .task table { border-collapse: collapse; margin: 18px 0; max-width: 100%; }
+  .task td, .task th { padding: 8px 14px; vertical-align: top; }
+  .task table.grid td, .task table.grid th { border: 1px solid #C9CED6; }
+  .task ol, .task ul { padding-left: 1.4em; }
+  .task math { font-size: 1.05em; }
+  footer {
+    display: flex; justify-content: space-between;
+    border-top: 1px solid var(--line); padding: 22px 56px;
+    font-size: 18px; color: var(--muted);
+  }
+</style>
+</head>
+<body>
+<div class="card" id="card">
+  <div class="bar"></div>
+  <header>
+    <div class="top">
+      <div class="subject"><i></i>{{ subject_title }}</div>
+      <div class="badge">Новое в банке</div>
+    </div>
+    <h1>{{ heading }}</h1>
+    <div class="meta">
+      <span>ID <b class="mono">{{ qid }}</b></span>
+      {% if kes %}<span>КЭС <b>{{ kes }}</b></span>{% endif %}
+      <span>Замечено <b>{{ seen_date }}</b></span>
+    </div>
+  </header>
+  <section class="task" id="task">{{ task_html | safe }}</section>
+  <footer>
+    <span>ФИПИ · Открытый банк заданий ЕГЭ</span>
+    <span class="mono">ege.fipi.ru</span>
+  </footer>
+</div>
+<script>
+  // ФИПИ рисует картинки под мелкий шрифт: формулы увеличиваем вместе с текстом,
+  // рисунки — крупно и по центру, но не шире карточки.
+  window.fitImages = function () {
+  const box = document.getElementById('task');
+  const maxW = box.clientWidth - 112;
+  for (const img of box.querySelectorAll('img')) {
+    const w = img.naturalWidth, h = img.naturalHeight;
+    if (!w) continue;
+    if (h <= 48 && w <= 420) {
+      img.style.height = Math.round(h * 2.0) + 'px';
+    } else {
+      img.classList.add('figure');
+      img.style.width = Math.min(Math.round(w * 1.8), maxW) + 'px';
+    }
+  }
+  for (const t of box.querySelectorAll('table')) {
+    const b = t.getAttribute('border');
+    if (b && b !== '0') t.classList.add('grid');   // настоящие таблицы с рамкой, а не вёрстка ФИПИ
+  }
+  };
+</script>
+</body>
+</html>
